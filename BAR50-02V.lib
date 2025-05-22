@@ -1,0 +1,33 @@
+***************************************************************
+* Mohamed Lanjri El Halimi
+* Subcircuit that contains the model plus package parasitics 
+* for BAR50-02V (SC79) 
+* Adapted from INFINEON TECHNOLOGIES original spice models
+* SC79.TXT and D383.txt
+***************************************************************
+*                           CAC
+*             (N1)          | |          (N2)
+*              +------------| |------------+
+*              |            | |            |
+*         LAO  |                           |  LCO
+*     A---LLL--+                           +--LLL---C
+*   (P1 )      |                           |      (P2)
+*              |  LAI                      |
+*              +--LLL---A' CHIP  C'--------+
+*                      (P3)      (P4)
+*
+
+.model BAR50 D(IS=417E-12 N=1.923 RS=.42 CJO=274E-15 M=.241 VJ=.987 BV=50 IBV=1E-6 TT=1.1E-6)
+
+.subckt  BAR50-02V P1 P2 ; P1=Anode, P2=Cathode (external pins)
+
+* Package netlist and parasitics values (from SC79.txt)
+LAO P1 N1 0.15n
+LCO P4 P2 0.1n
+LAI N1 P3 0.45n
+CAC P4 N1 90f
+
+* Diode chip (from D383.txt)
+D1 P3 P4 BAR50 ; Connects to internal package nodes P3 and P4, using the D383 model
+
+.ends BAR50-02V
